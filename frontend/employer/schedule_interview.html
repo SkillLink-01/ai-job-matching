@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Schedule Interview</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container py-5">
+    <h2>Schedule Interview</h2>
+    <form id="scheduleForm">
+      <div class="mb-3">
+        <label class="form-label">Jobseeker ID</label>
+        <input type="text" class="form-control" id="jobseekerId" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Job Title</label>
+        <input type="text" class="form-control" id="jobTitle" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Interview Date</label>
+        <input type="date" class="form-control" id="interviewDate" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Schedule</button>
+    </form>
+    <div id="response" class="mt-3"></div>
+  </div>
+
+  <script>
+    document.getElementById('scheduleForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const payload = {
+        jobseeker_id: document.getElementById('jobseekerId').value,
+        job_title: document.getElementById('jobTitle').value,
+        interview_date: document.getElementById('interviewDate').value
+      };
+
+      fetch('schedule_interview.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(data => {
+        const div = document.getElementById('response');
+        div.innerHTML = `<div class="alert alert-${data.status === 'success' ? 'success' : 'danger'}">${data.message}</div>`;
+      });
+    });
+  </script>
+</body>
+</html>

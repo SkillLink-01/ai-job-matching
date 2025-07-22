@@ -1,0 +1,12 @@
+{
+    "session": {
+        "user_id": "68767787aabb403fe1085b4d",
+        "role": "jobseeker",
+        "full_name": "Helen Eyob",
+        "jobseeker_id": "68767787aabb403fe1085b4d"
+    },
+    "post": {
+        "job_id": "686f728a838a4afeb1022374"
+    },
+    "files": []
+}

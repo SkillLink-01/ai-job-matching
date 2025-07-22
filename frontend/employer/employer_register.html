@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employer Sign Up - SkillLink</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #000080;
+      --light: #f0f4ff;
+      --accent: #ffcc00;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--light);
+      display: flex;
+      height: 100vh;
+    }
+
+    .container-wrapper {
+      display: flex;
+      width: 100%;
+    }
+
+    .left-panel {
+      flex: 1;
+      background: linear-gradient(135deg, var(--navy), #001f4d);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .left-panel h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .left-panel p {
+      font-size: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab-switch-wrapper {
+      display: flex;
+      width: 230px;
+      background-color: white;
+      border-radius: 40px;
+      padding: 5px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-link {
+      flex: 1;
+      text-align: center;
+      padding: 0.6rem 1rem;
+      border-radius: 40px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--navy);
+      transition: 0.3s ease;
+      background-color: transparent;
+    }
+
+    .tab-link.active {
+      background-color: var(--accent);
+      color: black;
+    }
+
+    .tab-link:hover {
+      background-color: #f2f2f2;
+    }
+
+    .right-panel {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background-color: white;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 550px;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-card h3 {
+      text-align: center;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      background-color: var(--navy);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #001f4d;
+    }
+
+    /* Show/Hide Password button style */
+    .position-relative {
+      position: relative;
+    }
+
+    .toggle-password-btn {
+      position: absolute;
+      top: 50%;
+      right: 0.75rem;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      font-size: 0.9rem;
+      cursor: pointer;
+      color: var(--navy);
+      padding: 0;
+      user-select: none;
+    }
+
+    .toggle-password-btn:focus {
+      outline: none;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .container-wrapper {
+        flex-direction: column;
+      }
+
+      .left-panel {
+        padding: 1.5rem;
+      }
+
+      .right-panel {
+        padding: 1rem;
+      }
+
+      .row .col-md-6 {
+        flex: 100%;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-wrapper">
+    <!-- Left Side Panel -->
+    <div class="left-panel">
+      <h1>SkillLink</h1>
+      <p>We Thrive You Link</p>
+      <div class="tab-switch-wrapper">
+        <a href="../shared/login.html" class="tab-link">Login</a>
+        <a href="employer_register.html" class="tab-link active">Sign Up</a>
+      </div>
+    </div>
+
+    <!-- Right Side Form -->
+    <div class="right-panel">
+      <div class="form-card">
+        <h3>Employer Registration</h3>
+        <form id="registerForm">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Company Name</label>
+              <input type="text" class="form-control" name="company_name" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" name="email" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Phone Number</label>
+              <input type="tel" class="form-control" name="phone" placeholder="+251..." required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Location</label>
+              <input type="text" class="form-control" name="location" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Industry</label>
+              <input type="text" class="form-control" name="industry" required>
+            </div>
+            <div class="col-md-6 mb-3 position-relative">
+              <label class="form-label">Password</label>
+              <input type="password" class="form-control" name="password" id="password" required>
+              <button type="button" class="toggle-password-btn" onclick="togglePassword('password', this)">Show</button>
+            </div>
+          </div>
+
+          <div class="mb-3 position-relative">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" class="form-control" name="confirm_password" id="confirm_password" required>
+            <button type="button" class="toggle-password-btn" onclick="togglePassword('confirm_password', this)">Show</button>
+          </div>
+
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="terms" required>
+            <label class="form-check-label" for="terms">
+              I agree to the Terms and Conditions
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Register</button>
+          <div id="result" class="mt-3 text-center"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Form Handler -->
+  <script>
+    function togglePassword(fieldId, btn) {
+      const input = document.getElementById(fieldId);
+      if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "Hide";
+      } else {
+        input.type = "password";
+        btn.textContent = "Show";
+      }
+    }
+
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const jsonData = {};
+      formData.forEach((value, key) => {
+        jsonData[key] = value;
+      });
+
+      if (jsonData.password !== jsonData.confirm_password) {
+        document.getElementById("result").textContent = "Passwords do not match.";
+        document.getElementById("result").className = "text-danger text-center mt-2";
+        return;
+      }
+
+      fetch("http://localhost/Final_Project1/job-matching-system/backend/employer/employer_register.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(jsonData)
+      })
+      .then(res => res.json())
+      .then(response => {
+        const resultDiv = document.getElementById("result");
+       if (response.success) {
+  resultDiv.textContent = response.message + " Redirecting to login...";
+  resultDiv.className = "text-success text-center mt-2";
+
+  setTimeout(() => {
+    window.location.href = "../shared/login.html";
+  }, 2000); // wait 2 seconds before redirect
+}
+ else {
+          resultDiv.textContent = response.error || "Registration failed.";
+          resultDiv.className = "text-danger text-center mt-2";
+        }
+      })
+      .catch(() => {
+        document.getElementById("result").textContent = "Network error occurred.";
+        document.getElementById("result").className = "text-danger text-center mt-2";
+      });
+    });
+  </script>
+</body>
+</html>

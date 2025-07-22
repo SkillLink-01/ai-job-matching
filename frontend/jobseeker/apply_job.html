@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Apply for Job</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #173D7A;
+      --light-navy: #2e57a6;
+      --hover-bg: #eef3fc;
+      --gray-text: #6c757d;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --bg: #f8f9fc;
+      --card-bg: #ffffff;
+      --text: #212529;
+      --input-text: #212529;
+    }
+    [data-theme="dark"] {
+      --navy: #6ea4ff;
+      --light-navy: #89b4ff;
+      --hover-bg: rgba(255,255,255,0.05);
+      --gray-text: #adb5bd;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --bg: #121417;
+      --card-bg: #1c1f24;
+      --text: #f1f3f5;
+      --input-text: #f1f3f5;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .navbar {
+      background-color: var(--card-bg);
+      box-shadow: var(--soft-shadow);
+      padding-left: 260px;
+    }
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--card-bg);
+      padding: 2rem 1rem;
+      box-shadow: var(--soft-shadow);
+      z-index: 1040;
+    }
+    .sidebar h4 {
+      color: var(--navy);
+      font-weight: bold;
+    }
+    .sidebar p {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      margin-bottom: 2rem;
+    }
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: var(--hover-bg);
+      color: var(--navy);
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .form-box {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--soft-shadow);
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .form-label,
+    .form-control,
+    .form-select {
+      color: var(--text);
+    }
+
+    .form-control,
+    .form-select {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      color: var(--input-text);
+    }
+
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+      background: #2c2f33;
+      color: #f1f3f5;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding-left: 0;
+      }
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h4>SkillLink</h4>
+  <p>We Link You Thrive</p>
+  <a href="jobseeker_dashboard.html">Dashboard</a>
+  <a href="profile.html">Profile</a>
+  <a href="view_applications.html">My Applications</a>
+  <a href="saved_jobs.html">Saved Jobs</a>
+  <a href="recommendations.html">Recommendations</a>
+  <a href="http://localhost/Final_Project1/job-matching-system/backend/jobseeker/logout.php">Logout</a>
+</div>
+
+<!-- Topbar -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <span class="fs-5 fw-semibold">Apply for Job</span>
+    <div class="ms-auto">
+      <button id="themeBtn" class="btn btn-outline-secondary btn-sm">🌓</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="content">
+  <div class="form-box">
+    <h3 class="mb-4">Job Application</h3>
+    <form>
+      <div class="mb-3">
+        <label for="jobTitle" class="form-label">Job Title</label>
+        <input type="text" class="form-control" id="jobTitle" placeholder="e.g. Admin Assistant" readonly>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="firstName" class="form-label">First Name</label>
+          <input type="text" class="form-control" id="firstName" required>
+        </div>
+        <div class="col-md-6">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input type="text" class="form-control" id="lastName" required>
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="email" required>
+        </div>
+        <div class="col-md-6">
+          <label for="phone" class="form-label">Phone</label>
+          <input type="tel" class="form-control" id="phone" required>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="resume" class="form-label">Resume (PDF or DOC)</label>
+        <input type="file" class="form-control" id="resume" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="coverLetter" class="form-label">Cover Letter</label>
+        <textarea class="form-control" id="coverLetter" rows="4"></textarea>
+      </div>
+
+      !-- <div class="mb-3">
+        <label for="extraQuestions" class="form-label">Additional Questions</label>
+        <textarea class="form-control" id="extraQuestions" rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const body = document.body, themeBtn = document.getElementById('themeBtn');
+  function setTheme(t) {
+    body.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+  }
+  themeBtn.onclick = () => setTheme(body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  (function () {
+    const saved = localStorage.getItem('theme') || 'light';
+    setTheme(saved);
+  })();
+</script>
+</body>
+</html>

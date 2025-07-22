@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Saved Jobs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #173D7A;
+      --light-navy: #2e57a6;
+      --hover-bg: #eef3fc;
+      --gray-text: #6c757d;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --bg: #f8f9fc;
+      --card-bg: #ffffff;
+      --text: #212529;
+      --input-text: #212529;
+    }
+
+    [data-theme="dark"] {
+      --navy: #6ea4ff;
+      --light-navy: #89b4ff;
+      --hover-bg: rgba(255,255,255,0.05);
+      --gray-text: #adb5bd;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --bg: #121417;
+      --card-bg: #1c1f24;
+      --text: #f1f3f5;
+      --input-text: #f1f3f5;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .navbar {
+      background-color: var(--card-bg);
+      box-shadow: var(--soft-shadow);
+      padding-left: 260px;
+    }
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--card-bg);
+      padding: 2rem 1rem;
+      box-shadow: var(--soft-shadow);
+      z-index: 1040;
+    }
+
+    .sidebar h4 {
+      color: var(--navy);
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar p {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      margin-bottom: 2rem;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: var(--hover-bg);
+      color: var(--navy);
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .job-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: var(--soft-shadow);
+      height: 100%;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 768px) {
+      .navbar { padding-left: 0; }
+      .content { margin-left: 0; }
+    }
+
+    .company-logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #ddd;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 0.05rem;
+      right: 0.5rem;
+      border: none;
+      background: transparent;
+      font-size: 2.5rem;
+      color: #dc3545;
+    }
+
+    .apply-btn {
+      align-self: end;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h4>SkillLink</h4>
+  <p>We Link You Thrive</p>
+  <a href="jobseeker_dashboard.html">Dashboard</a>
+  <a href="profile.html">Profile</a>
+  <a href="view_applications.html">My Applications</a>
+  <a href="saved_jobs.html" class="active">Saved Jobs</a>
+  <a href="recommendations.html">Recommendations</a>
+  <a href="http://localhost/Final_Project1/job-matching-system/backend/jobseeker/logout.php">Logout</a>
+</div>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <span class="fs-5 fw-semibold">Saved Jobs</span>
+    <div class="ms-auto">
+      <button id="themeBtn" class="btn btn-outline-secondary btn-sm">🌓</button>
+    </div>
+  </div>
+</nav>
+
+<div class="content">
+  <h2 class="fw-bold mb-4">Saved Jobs</h2>
+  <div id="savedJobs" class="row row-cols-1 row-cols-md-2 g-4"></div>
+</div>
+
+<!-- Job Details Modal -->
+<div class="modal fade" id="jobDetailsModal" tabindex="-1" aria-labelledby="jobDetailsLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+    <div class="modal-content bg-light" data-theme="light">
+      <div class="modal-header">
+        <h5 class="modal-title" id="jobDetailsLabel">Job Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="jobDetailsBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const body = document.body, themeBtn = document.getElementById('themeBtn');
+  function setTheme(t) {
+    body.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+  }
+  themeBtn.onclick = () => setTheme(body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  (function () {
+    const saved = localStorage.getItem('theme') || 'light';
+    setTheme(saved);
+  })();
+
+  async function loadSavedJobs() {
+    const container = document.getElementById('savedJobs');
+    container.innerHTML = '<p class="text-muted">Loading...</p>';
+
+    try {
+      const res = await fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/get_saved_jobs.php', {
+        credentials: 'include'
+      });
+      const jobs = await res.json();
+      container.innerHTML = '';
+
+      if (!Array.isArray(jobs) || jobs.length === 0) {
+        container.innerHTML = '<div class="col"><div class="alert alert-info">No saved jobs found.</div></div>';
+        return;
+      }
+
+      jobs.forEach(job => {
+        const col = document.createElement('div');
+        col.className = 'col';
+
+        const logo = job.logo_path
+          ? `http://localhost/Final_Project1/job-matching-system/${job.logo_path}`
+          : 'https://dummyimage.com/50x50/173D7A/ffffff&text=Logo';
+
+        col.innerHTML = `
+          <div class="job-card">
+            <button class="remove-btn" onclick="removeJob('${job._id}')" title="Remove Job">&times;</button>
+            <div class="d-flex mb-2">
+              <img src="${logo}" class="company-logo me-3">
+              <div>
+                <h5 class="mb-1">${job.title}</h5>
+                <p class="mb-1"><strong>Company:</strong> ${job.company}</p>
+                <p class="mb-1"><strong>Location:</strong> ${job.location}</p>
+                <p class="mb-1"><strong>Type:</strong> ${job.job_type || 'N/A'}</p>
+              </div>
+            </div>
+            <div class="mt-2 d-flex justify-content-between align-items-center">
+              <button class="btn btn-sm btn-outline-primary" onclick='viewDetails(${JSON.stringify(job)})'>Details</button>
+              <a href="apply_job.html?job_id=${job._id}" class="btn btn-sm btn-success apply-btn">Apply</a>
+            </div>
+          </div>`;
+        container.appendChild(col);
+      });
+
+    } catch (err) {
+      container.innerHTML = '<div class="alert alert-danger">Failed to load saved jobs.</div>';
+      console.error('Fetch error:', err);
+    }
+  }
+
+  function viewDetails(job) {
+    const modalBody = document.getElementById('jobDetailsBody');
+    modalBody.innerHTML = `
+      <p><strong>Job Title:</strong> ${job.title}</p>
+      <p><strong>Company:</strong> ${job.company}</p>
+      <p><strong>Location:</strong> ${job.location}</p>
+      <p><strong>Type:</strong> ${job.job_type || 'N/A'}</p>
+      <p><strong>Description:</strong><br>${job.description || 'No description provided.'}</p>
+    `;
+    new bootstrap.Modal(document.getElementById('jobDetailsModal')).show();
+  }
+
+  async function removeJob(jobId) {
+    if (!confirm("Remove this job from saved list?")) return;
+
+    const res = await fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/remove_saved_job.php', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'job_id=' + encodeURIComponent(jobId)
+    });
+
+    const result = await res.json();
+    alert(result.message);
+    if (result.status === 'success') {
+      loadSavedJobs();
+    }
+  }
+
+  loadSavedJobs();
+</script>
+</body>
+</html>

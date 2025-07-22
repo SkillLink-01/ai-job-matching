@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Applications</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container py-4">
+    <h2 class="mb-4">My Job Applications</h2>
+    <div id="applicationsList" class="list-group"></div>
+    <div id="noApps" class="text-muted mt-3" style="display: none;">You haven't applied for any jobs yet.</div>
+  </div>
+
+  <!-- Bootstrap Modal for Job Details -->
+  <div class="modal fade" id="jobDetailsModal" tabindex="-1" aria-labelledby="jobDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="jobDetailsModalLabel">Job Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="jobDetailsBody">
+          <!-- Job details will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/get_applications.php', {
+  credentials: 'include'
+})
+
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('applicationsList');
+        const noApps = document.getElementById('noApps');
+
+        if (data.length === 0) {
+          noApps.style.display = 'block';
+          return;
+        }
+
+        data.forEach(app => {
+          const item = document.createElement('div');
+          item.className = 'list-group-item';
+
+          item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h5>${app.job_title} <span class="badge bg-secondary">${app.status}</span></h5>
+                <p class="mb-1">Company: ${app.company_name}</p>
+                <small>Applied on: ${app.applied_at}</small>
+              </div>
+              <button class="btn btn-sm btn-outline-primary" onclick='showDetails(${JSON.stringify(app)})'>Details</button>
+            </div>
+          `;
+
+          list.appendChild(item);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading applications:', err);
+      });
+
+    function showDetails(app) {
+      const modalBody = document.getElementById('jobDetailsBody');
+
+      modalBody.innerHTML = `
+        <h5>${app.job_title}</h5>
+        <p><strong>Company:</strong> ${app.company_name}</p>
+        <p><strong>Status:</strong> ${app.status}</p>
+        <p><strong>Location:</strong> ${app.location ?? 'N/A'}</p>
+        <p><strong>Type:</strong> ${app.job_type ?? 'N/A'}</p>
+        <p><strong>Description:</strong> ${app.job_description ?? 'No description available.'}</p>
+        <p><strong>Applied At:</strong> ${app.applied_at}</p>
+        ${app.resume ? `<p><strong>Resume:</strong> <a href="../backend/jobseeker/${app.resume}" target="_blank">View Resume</a></p>` : ''}
+        ${app.cover_letter ? `<p><strong>Cover Letter:</strong> ${app.cover_letter}</p>` : ''}
+      `;
+
+      const modal = new bootstrap.Modal(document.getElementById('jobDetailsModal'));
+      modal.show();
+    }
+  </script>
+</body>
+</html>

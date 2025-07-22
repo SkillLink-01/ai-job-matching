@@ -1,0 +1,5 @@
+job_id,candidate_id,job_title,job_description,candidate_name,candidate_resume,skill_match_count,min_experience_met,label
+1,101,Software Engineer,"Develop software applications using Python and JavaScript.","Alice","Experienced software engineer with Python, JavaScript, and cloud skills.",3,1,1
+2,102,Data Scientist,"Analyze large datasets and build machine learning models.","Bob","Data scientist skilled in Python, R, and machine learning.",2,1,1
+3,103,Web Developer,"Build and maintain websites with HTML, CSS, and JavaScript.","Charlie","Front-end developer familiar with HTML, CSS, JavaScript.",3,0,0
+4,104,Project Manager,"Manage software projects and coordinate teams.","Dana","Project manager with experience in Agile and Scrum.",1,1,1

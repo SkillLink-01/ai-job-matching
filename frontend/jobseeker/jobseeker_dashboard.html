@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Job Seeker Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #173D7A;
+      --light-navy: #2e57a6;
+      --hover-bg: #eef3fc;
+      --gray-text: #6c757d;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --bg: #f8f9fc;
+      --card-bg: #ffffff;
+      --text: #212529;
+      --input-text: #212529;
+    }
+    [data-theme="dark"] {
+      --navy: #6ea4ff;
+      --light-navy: #89b4ff;
+      --hover-bg: rgba(255,255,255,0.05);
+      --gray-text: #adb5bd;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --bg: #121417;
+      --card-bg: #1c1f24;
+      --text: #f1f3f5;
+      --input-text: #f1f3f5;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .navbar {
+      background-color: var(--card-bg);
+      box-shadow: var(--soft-shadow);
+      padding-left: 260px;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: var(--navy) !important;
+    }
+
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--card-bg);
+      padding: 2rem 1rem;
+      box-shadow: var(--soft-shadow);
+      z-index: 1040;
+    }
+    .sidebar h4 {
+      color: var(--navy);
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .sidebar p {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      margin-bottom: 2rem;
+    }
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: var(--hover-bg);
+      color: var(--navy);
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .job-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1rem 1.3rem;
+      box-shadow: var(--soft-shadow);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .job-card h5 {
+      color: var(--navy);
+      font-weight: 600;
+    }
+
+    .company-logo {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+
+    .search-container input,
+    .search-container select {
+      background: none;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      color: var(--input-text);
+      font-weight: bold;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding-left: 0;
+      }
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h4>SkillLink</h4>
+  <p>We Link You Thrive</p>
+  <a href="jobseeker_dashboard.html" class="active">Dashboard</a>
+  <a href="profile.html">Profile</a>
+  <a href="view_applications.html">My Applications</a>
+  <a href="saved_jobs.html">Saved Jobs</a>
+  <a href="recommendations.html">Recommendations</a>
+  <a href="http://localhost/Final_Project1/job-matching-system/backend/jobseeker/logout.php">Logout</a>
+</div>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <span class="fs-5 fw-semibold">Dashboard</span>
+    <div class="ms-auto d-flex align-items-center gap-2">
+      <a href="jobseeker_notifications.html" class="btn btn-outline-primary btn-sm" title="Notifications">
+        <i class="bi bi-bell"></i>
+      </a>
+      <button id="themeBtn" class="btn btn-outline-secondary btn-sm" title="Toggle theme">🌓</button>
+    </div>
+  </div>
+</nav>
+
+<div class="content">
+  <h2 class="fw-bold mb-3" id="greeting">Hello, User!</h2>
+  <div class="search-container mb-4">
+    <div class="row g-2">
+      <div class="col-md-4"><input class="form-control fw-bold" id="searchInput" placeholder="Search title…"></div>
+      <div class="col-md-3">
+        <select class="form-select fw-bold" id="typeFilter">
+          <option value="">All Types</option>
+          <option>Full-time</option>
+          <option>Part-time</option>
+          <option>Internship</option>
+        </select>
+      </div>
+      <div class="col-md-3"><input class="form-control fw-bold" id="locFilter" placeholder="Location…"></div>
+      <div class="col-md-2"><button class="btn btn-primary w-100" onclick="fetchJobs()">Search</button></div>
+    </div>
+  </div>
+  <div id="jobList" class="row g-4"></div>
+</div>
+
+<div class="modal fade" id="jobModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Job Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalContent"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const body = document.body, themeBtn = document.getElementById('themeBtn');
+  function setTheme(t) {
+    body.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+  }
+  themeBtn.onclick = () => setTheme(body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  (function () {
+    const saved = localStorage.getItem('theme') || 'light';
+    setTheme(saved);
+  })();
+
+  async function fetchJobs() {
+    const title = document.getElementById('searchInput').value.toLowerCase();
+    const type = document.getElementById('typeFilter').value;
+    const loc = document.getElementById('locFilter').value.toLowerCase();
+    const list = document.getElementById('jobList');
+    list.innerHTML = '<p class="text-muted">Loading…</p>';
+
+    try {
+      const res = await fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/get_jobs.php');
+      const jobs = await res.json();
+
+      list.innerHTML = '';
+      (jobs || []).filter(j =>
+        (!title || j.title.toLowerCase().includes(title)) &&
+        (!type || j.job_type === type) &&
+        (!loc || j.location.toLowerCase().includes(loc))
+      ).forEach(j => {
+  const col = document.createElement('div');
+  col.className = 'col-md-6';
+  const logo = j.logo || 'https://dummyimage.com/50x50/173D7A/ffffff&text=Logo';
+  col.innerHTML = `
+    <div class="job-card">
+      <div class="d-flex">
+        <img src="${logo}" class="company-logo" alt="logo">
+        <div>
+          <h5>${j.title}</h5>
+          <p><strong>Company:</strong> ${j.company}</p>
+          <p><strong>Type:</strong> ${j.job_type} | <strong>Location:</strong> ${j.location}</p>
+        </div>
+      </div>
+      <p>${j.description.slice(0, 90)}… <a href="#" onclick="show('${encodeURIComponent(JSON.stringify(j))}')" class="text-primary">More</a></p>
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="apply_job.html?job_id=${j._id}" class="btn btn-sm btn-success">Apply</a>
+        <div>
+          <button class="btn btn-sm btn-outline-secondary" onclick="saveJob('${j._id}', this)">Save</button>
+          <span id="saved-${j._id}" class="saved-badge" style="display:none">✔ Saved</span>
+        </div>
+      </div>
+    </div>
+  `;
+  list.appendChild(col);
+});
+
+    } catch (error) {
+      list.innerHTML = '<div class="alert alert-danger">Failed to load jobs.</div>';
+    }
+  }
+
+  function show(encoded) {
+    const j = JSON.parse(decodeURIComponent(encoded));
+    document.getElementById('modalContent').innerHTML = `
+      <h4>${j.title}</h4>
+      <p><strong>Company:</strong> ${j.company}</p>
+      <p><strong>Type:</strong> ${j.job_type}</p>
+      <p><strong>Location:</strong> ${j.location}</p>
+      <hr>
+      <p>${j.description}</p>`;
+    new bootstrap.Modal('#jobModal').show();
+  }
+
+  async function saveJob(id, btn) {
+    const res = await fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/save_job.php', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'job_id=' + encodeURIComponent(id)
+    });
+    const result = await res.json();
+    document.getElementById('saved-' + id).style.display = 'inline';
+    alert(result.message || 'Saved!');
+  }
+
+  async function fetchProfile() {
+    try {
+      const res = await fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/get_profile.php', {
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (data.full_name) {
+        document.getElementById('greeting').textContent = `Hello, ${data.full_name}!`;
+      }
+    } catch (err) {
+      console.error('Failed to fetch profile:', err);
+    }
+  }
+
+  fetchProfile();
+  fetchJobs();
+</script>
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jobseeker Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #173D7A;
+      --light-navy: #2e57a6;
+      --hover-bg: #eef3fc;
+      --gray-text: #6c757d;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --bg: #f8f9fc;
+      --card-bg: #ffffff;
+      --text: #212529;
+    }
+    [data-theme="dark"] {
+      --navy: #6ea4ff;
+      --light-navy: #89b4ff;
+      --hover-bg: rgba(255,255,255,0.05);
+      --gray-text: #adb5bd;
+      --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      --bg: #121417;
+      --card-bg: #1c1f24;
+      --text: #f1f3f5;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.3s, color 0.3s;
+    }
+    .navbar {
+      background-color: var(--card-bg);
+      box-shadow: var(--soft-shadow);
+      padding-left: 260px;
+    }
+    .navbar-brand {
+      font-weight: bold;
+      color: var(--navy) !important;
+    }
+    .sidebar {
+      width: 240px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: var(--card-bg);
+      padding: 2rem 1rem;
+      box-shadow: var(--soft-shadow);
+      z-index: 1040;
+    }
+    .sidebar h4 {
+      color: var(--navy);
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    .sidebar p {
+      font-size: 0.9rem;
+      color: var(--gray-text);
+      margin-bottom: 2rem;
+    }
+    .sidebar a {
+      display: block;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+    .sidebar a:hover,
+    .sidebar a.active {
+      background: var(--hover-bg);
+      color: var(--navy);
+    }
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+    .card {
+      background: var(--card-bg);
+      box-shadow: var(--soft-shadow);
+      border-radius: 12px;
+    }
+    .progress-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .modal-content {
+      border-radius: 16px;
+      box-shadow: var(--soft-shadow);
+    }
+    .modal-header {
+      background-color: var(--hover-bg);
+      border-bottom: 1px solid var(--gray-text);
+    }
+    .modal-title {
+      font-weight: bold;
+      color: var(--navy);
+    }
+    .form-control {
+      border-radius: 10px;
+    }
+    .btn-primary {
+      background-color: var(--navy);
+      border: none;
+    }
+    .btn-primary:hover {
+      background-color: var(--light-navy);
+    }
+    .experience-row {
+      background: var(--hover-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.75rem;
+    }
+    .modal-body .form-label {
+      font-weight: 600;
+    }
+    .modal-body input::placeholder {
+      font-style: italic;
+      color: var(--gray-text);
+    }
+  </style>
+</head>
+<body>
+<div class="sidebar">
+  <h4>SkillLink</h4>
+  <p>We Link You Thrive</p>
+  <a href="jobseeker_dashboard.html">Dashboard</a>
+  <a href="#" class="active">Profile</a>
+  <a href="view_applications.html">My Applications</a>
+  <a href="saved_jobs.html">Saved Jobs</a>
+  <a href="recommendations.html">Recommendations</a>
+  <a href="http://localhost/Final_Project1/job-matching-system/backend/jobseeker/logout.php">Logout</a>
+</div>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <span class="fs-5 fw-semibold">Profile</span>
+    <div class="ms-auto">
+      <button id="themeBtn" class="btn btn-outline-secondary btn-sm">🌓</button>
+    </div>
+  </div>
+</nav>
+
+<div class="content">
+  <div class="progress-wrapper">
+    <h2 class="fw-bold mb-3">My Profile</h2>
+    <div>
+      <label>Profile Completion</label>
+      <div class="progress" style="height: 8px; width: 150px;">
+        <div class="progress-bar" role="progressbar" style="width: 75%"></div>
+      </div>
+    </div>
+  </div>
+  <div class="card p-4">
+    <div id="profileInfo">Loading profile…</div>
+  </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <form class="modal-content" id="editProfileForm">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Your Profile</h5>
+        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close" style="background:none; border:none;">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z"/>
+  </svg>
+</button>
+
+      </div>
+      <div class="modal-body row g-4 px-4 pt-3">
+        <div class="col-md-6">
+          <label class="form-label">Full Name</label>
+          <input name="full_name" class="form-control" placeholder="Enter your full name" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input name="email" type="email" class="form-control" placeholder="Enter your email" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Location</label>
+          <input name="location" class="form-control" placeholder="Your current location">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Desired Job-Type</label>
+          <input name="job_type" class="form-control" placeholder="e.g. Full-time">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Skills <small class="text-muted">(comma-separated)</small></label>
+          <input name="skills" class="form-control" placeholder="e.g. HTML, CSS, Communication">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Upload Resume</label>
+          <input id="resumeInput" type="file" accept=".pdf,.doc,.docx" class="form-control">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Experience</label>
+          <div id="experienceList" class="mb-2"></div>
+          <button type="button" class="btn btn-sm btn-outline-primary" onclick="addExperienceField()">
+            + Add Experience
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Theme Toggle
+const body = document.body, themeBtn = document.getElementById('themeBtn');
+function setTheme(t) {
+  body.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+}
+themeBtn.onclick = () => setTheme(body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+(function () {
+  const saved = localStorage.getItem('theme') || 'light';
+  setTheme(saved);
+})();
+
+let profileData = {};
+let resumeBase64 = '', resumeFilename = '';
+
+const $profileInfo   = document.getElementById('profileInfo');
+const $editForm      = document.getElementById('editProfileForm');
+const $experienceBox = document.getElementById('experienceList');
+
+fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/get_profile.php', { credentials: 'include' })
+  .then(r => r.json())
+  .then(json => {
+    if (json.error) { $profileInfo.textContent = json.error; return; }
+    profileData = json;
+    renderProfile(json);
+  })
+  .catch(() => $profileInfo.textContent = '❌  Error loading profile');
+
+function renderProfile(p) {
+  const expHtml = (p.experience||[])
+    .map(e=>`<li><b>${e.title}</b> @ ${e.company} (${e.start_date} – ${e.end_date})</li>`).join('');
+  const skills  = (p.skills||[]).join(', ');
+
+  const resumeLink = p.resume?.content
+    ? `<a href="data:application/octet-stream;base64,${p.resume.content}" download="${p.resume.filename||'resume'}">Download Resume</a>`
+    : 'Not uploaded';
+
+  $profileInfo.innerHTML = `
+    <p><b>Name:</b> ${p.full_name}</p>
+    <p><b>Email:</b> ${p.email}</p>
+    <p><b>Location:</b> ${p.location||'-'}</p>
+    <p><b>Job Type:</b> ${p.job_type||'-'}</p>
+    <p><b>Skills:</b> ${skills||'-'}</p>
+    <p><b>Experience:</b></p><ul>${expHtml}</ul>
+    <p><b>Resume:</b> ${resumeLink}</p>
+    <button class="btn btn-outline-primary btn-edit" onclick="openEditModal()">Edit Profile</button>`;
+}
+
+function openEditModal() {
+  const m = new bootstrap.Modal('#editProfileModal');
+  $editForm.full_name.value = profileData.full_name||'';
+  $editForm.email.value     = profileData.email||'';
+  $editForm.location.value  = profileData.location||'';
+  $editForm.job_type.value  = profileData.job_type||'';
+  $editForm.skills.value    = (profileData.skills||[]).join(', ');
+  resumeBase64 = resumeFilename = '';
+  $experienceBox.innerHTML = '';
+  (profileData.experience||[]).forEach(addExperienceField);
+  m.show();
+}
+
+function addExperienceField(e={}) {
+  const row = document.createElement('div');
+  row.className = 'row g-2 mb-2';
+  row.innerHTML = `
+    <div class="col"><input name="exp_title"  class="form-control" placeholder="Title"   value="${e.title   ||''}"></div>
+    <div class="col"><input name="exp_comp"   class="form-control" placeholder="Company" value="${e.company ||''}"></div>
+    <div class="col"><input name="exp_start"  class="form-control" placeholder="Start"   value="${e.start_date||''}"></div>
+    <div class="col"><input name="exp_end"    class="form-control" placeholder="End"     value="${e.end_date ||''}"></div>
+    <div class="col-auto"><button class="btn btn-danger" onclick="this.closest('.row').remove()">×</button></div>`;
+  $experienceBox.appendChild(row);
+}
+
+document.getElementById('resumeInput').addEventListener('change', e=>{
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    resumeBase64 = ev.target.result.split(',')[1];
+    resumeFilename = f.name;
+  };
+  r.readAsDataURL(f);
+});
+
+$editForm.addEventListener('submit', e => {
+  e.preventDefault();
+
+  const exps = [...$experienceBox.querySelectorAll('.row')].map(r => ({
+    title      : r.querySelector('input[name="exp_title"]').value.trim(),
+    company    : r.querySelector('input[name="exp_comp"]').value.trim(),
+    start_date : r.querySelector('input[name="exp_start"]').value.trim(),
+    end_date   : r.querySelector('input[name="exp_end"]').value.trim()
+  })).filter(x => x.title);
+
+  const skillsArr = $editForm.skills.value
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean);
+
+  const payload = {
+    full_name : $editForm.full_name.value.trim(),
+    email     : $editForm.email.value.trim(),
+    location  : $editForm.location.value.trim(),
+    job_type  : $editForm.job_type.value.trim(),
+    skills    : skillsArr,
+    experience: exps,
+    resume_base64 : resumeBase64,
+    resume_filename: resumeFilename
+  };
+
+  fetch('http://localhost/Final_Project1/job-matching-system/backend/jobseeker/update_profile.php', {
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+})
+.then(async (r) => {
+  const text = await r.text();
+  try {
+    const j = JSON.parse(text);
+    if (j.error) return alert(j.error);
+    profileData = j;
+    renderProfile(j);
+    bootstrap.Modal.getInstance(document.getElementById('editProfileModal')).hide();
+    alert('✅ Profile updated successfully!');
+  } catch (err) {
+    console.error('Invalid JSON:', text);
+    alert('⚠️ Profile updated, but response was not JSON.');
+  }
+})
+.catch((err) => {
+  console.error('Fetch error:', err);
+  alert('❌ Network error while saving profile');
+});
+
+});
+</script>
+</body>
+</html>
+

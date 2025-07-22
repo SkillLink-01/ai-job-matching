@@ -1,0 +1,25 @@
+{
+    "job_id": {
+        "$oid": "686f728a838a4afeb1022374"
+    },
+    "user_id": {
+        "$oid": "68767787aabb403fe1085b4d"
+    },
+    "first_name": "Helen Eyob",
+    "last_name": "Tesma",
+    "email": "helen1@gmail.com",
+    "phone": "0900220022",
+    "cover_letter": "",
+    "resume": "uploads\/resumes\/resume_68789bf1d1e977.85549469.pdf",
+    "custom_answers": [],
+    "status": "Applied",
+    "applied_at": {
+        "$date": {
+            "$numberLong": "1752734705864"
+        }
+    },
+    "company_name": "2F Capital",
+    "job_type": "Full-time",
+    "location": "Dira Dawa, Ethiopia",
+    "job_title": "Medical Receptionist"
+}

@@ -1,0 +1,55 @@
+{
+    "session": {
+        "employer_id": "684eafedb58362689002eb12",
+        "company_name": "ET-Graphics",
+        "user_id": "6852d83dc1ef508c8f06c652",
+        "role": "jobseeker",
+        "jobseeker_id": "6852d83dc1ef508c8f06c652",
+        "full_name": "Samrawit Abebe"
+    },
+    "post": {
+        "first_name": "Samrawit ",
+        "last_name": "Abebe",
+        "email": "samri1234@gmail.com",
+        "phone": "+251961098912",
+        "cover_letter": "",
+        "job_id": "684c2fc7d4e3dcc5bde06a9c"
+    },
+    "files": {
+        "resume": {
+            "name": "Windows.docx",
+            "full_path": "Windows.docx",
+            "type": "application\/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "tmp_name": "C:\\xampp\\tmp\\phpDFC.tmp",
+            "error": 0,
+            "size": 18553
+        }
+    }
+}{
+    "session": {
+        "employer_id": "684eafedb58362689002eb12",
+        "company_name": "ET-Graphics",
+        "user_id": "6852d83dc1ef508c8f06c652",
+        "role": "jobseeker",
+        "jobseeker_id": "6852d83dc1ef508c8f06c652",
+        "full_name": "Samrawit Abebe"
+    },
+    "post": {
+        "first_name": "Samrawit ",
+        "last_name": "Abebe",
+        "email": "samri1234@gmail.com",
+        "phone": "+251961098912",
+        "cover_letter": "",
+        "job_id": "684c2fc7d4e3dcc5bde06a9c"
+    },
+    "files": {
+        "resume": {
+            "name": "Windows.docx",
+            "full_path": "Windows.docx",
+            "type": "application\/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "tmp_name": "C:\\xampp\\tmp\\phpEB25.tmp",
+            "error": 0,
+            "size": 18553
+        }
+    }
+}

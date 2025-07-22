@@ -1,0 +1,14 @@
+[
+  {
+    "to": "employer456",
+    "message": "John Doe applied to your job: Software Developer"
+  },
+  {
+    "to": "jobseeker123",
+    "message": "Your application for Software Developer was received."
+  },
+  {
+    "to": "employer456",
+    "message": "Interview with John Doe has been completed."
+  }
+]
